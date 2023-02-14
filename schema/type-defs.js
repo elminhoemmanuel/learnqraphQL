@@ -9,6 +9,7 @@ const typeDefs = gql`
         age: String!
         nationality: String!
     }
+    
 
     type Query {
         users: [User!]!
