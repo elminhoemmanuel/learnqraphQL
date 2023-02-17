@@ -4,7 +4,10 @@ const _ = require("lodash")
 const resolvers = {
     Query: {
         //User Resolvers
-        users: () => UserList,
+        users: () => {
+            if(UserList) return { users: UserList } 
+            return { message: "Something went wrong" }
+        },
 
         user: (parent, { id }) => {
             const user = UserList.find((person)=> person.id === Number(id))
@@ -21,7 +24,9 @@ const resolvers = {
 
     },
     User: {
-        favouriteMovies: () => MovieList.filter((movie)=>movie.yearOfPublication >=2000 && movie.yearOfPublication <= 2010)
+        favouriteMovies: (parent, args, context) =>{
+            return MovieList.filter((movie)=>movie.yearOfPublication >=2000 && movie.yearOfPublication <= 2010)
+        } 
     },
     Mutation: {
         createUser: (parent, { input }) => {
@@ -48,6 +53,12 @@ const resolvers = {
             _.remove(UserList, (user)=> user.id === Number(id ))
             return null
         },
+    },
+    UsersResult: {
+        __resolveType(obj) {
+            if(obj.users) return "UsersSuccessfulResult"
+            if(obj.message) return "UsersErrorResult"
+        }
     }
 }
 

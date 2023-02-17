@@ -3,7 +3,9 @@ const { typeDefs } = require("./schema/type-defs")
 const { resolvers } = require("./schema/resolvers")
 
 
-const server = new ApolloServer({ typeDefs, resolvers })
+const server = new ApolloServer({ typeDefs, resolvers, context: ()=>{
+    return { name: "Abobo" }
+} })
 
 server.listen().then(({ url })=>{
     console.log(`YOUR API IS RUNNING AT ${url} :)`)
